@@ -1,0 +1,57 @@
+.btn-group {
+  display: inline-flex;
+  gap: 12px;
+
+  button {
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: large;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+    &.btn-correct {
+      background-color: green;
+    }
+    &.btn-wrong {
+      background-color: crimson;
+    }
+  }
+}
+
+.error-container {
+  padding: 12px;
+  margin-top: 12px;
+  border: 1px solid crimson;
+  border-radius: 12px;
+}
+
+.result {
+  margin-top: 10px;
+  border-radius: 10px;
+  background-color: #555;
+  padding: 12px;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    tr {
+      &:first-child {
+        background-color: slateblue;
+        border: 1px solid;
+
+      }
+
+      &:nth-child(even) {
+        background-color: #444;
+      }
+
+    }
+    td {
+      padding: 6px;
+      border: 1px solid;
+      align-content: end;
+    }
+  }
+}

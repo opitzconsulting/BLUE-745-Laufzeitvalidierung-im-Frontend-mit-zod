@@ -1,0 +1,11 @@
+<div class="root">
+  <div>
+    <div class="indicator waiting" *ngIf="this.connected === undefined"></div>
+    <div class="indicator success" *ngIf="this.connected === true"></div>
+    <div class="indicator failed" *ngIf="this.connected === false"></div>
+  </div>
+  <div class="text">
+    <span class="url">{{ this.hostUrl }}</span>
+    <span> {{ this.context }} </span>
+  </div>
+</div>

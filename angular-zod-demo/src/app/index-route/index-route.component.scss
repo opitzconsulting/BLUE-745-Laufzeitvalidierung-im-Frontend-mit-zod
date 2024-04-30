@@ -1,0 +1,18 @@
+.btn-group {
+  display: inline-flex;
+  gap: 8px;
+
+  button {
+    padding: 12px;
+    font-size: large;
+    background-color: #2d5a80;
+    color: aliceblue;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    &:hover {
+      background-color: #4388c0;
+
+    }
+  }
+}

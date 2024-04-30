@@ -1,0 +1,16 @@
+<h1>Zod+HTTP Demo</h1>
+<p>
+  Im Rahmen eines Blogartikels wurde Zod, sowie die Konvertierung von Java DTOs
+  über JSON-Schema hin zu Zod genauer betrachtet. Hier sind 2 Routen definiert,
+  über welche demonstrativ 2 Anfragen gegen ein Quarkus-Backend ausgeführt
+  werden.
+</p>
+
+<div class="btn-group">
+  <button class="btn" [routerLink]="['/weather']">
+    Wetterstation-Demo (Response Validierung)
+  </button>
+  <button class="btn" [routerLink]="['/sum']">
+    Berechnungs-Demo (Request+Response Validierung)
+  </button>
+</div>

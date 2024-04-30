@@ -1,0 +1,36 @@
+.indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  background-color: gray;
+
+  &.waiting {
+    background-color: yellow;
+  }
+  &.success {
+    background-color: green;
+  }
+  &.failed {
+    background-color: red;
+  }
+
+
+}
+
+span.url {
+  font-size: larger;
+}
+
+
+.root {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.text {
+  display: inline-flex;
+  flex-direction: column;
+}

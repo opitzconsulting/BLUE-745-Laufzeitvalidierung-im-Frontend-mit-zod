@@ -1,0 +1,65 @@
+<a style="color: white" [routerLink]="['/']">Zurück zur Index-Seite</a>
+<h1>Summen-Demo</h1>
+
+<p>
+  In dieser Demo werden über die fetch-API Profit- und Ausgabendaten in Form
+  einer POST-Anfrage übermittelt. Für den Body, sowie die Antwort vom Server,
+  wurden automatisch zod-Typen erstellt.
+</p>
+<p>
+  Die Zod-Typen werden aus aus dem Quarkus-Backend exportierten JSON-Schemas
+  erstellt.
+</p>
+
+<p>
+  Der grüne Button sendet eine <i>korrekte</i> Anfrage. Es kommt eine Antwort
+  zurück, welche dem Schema entspricht. Der rote Button sendet einen falschen
+  Payload. Dieser wird noch <b>vor dem Absenden</b> mit Zod validiert und
+  blockiert. Es kommt also zu keinem Aufruf.
+</p>
+
+<div class="btn-group">
+  <button
+    (click)="this.bodyPayload$.next(this.createCorrectBody())"
+    class="btn-correct"
+  >
+    Korrekter Body
+  </button>
+  <button
+    (click)="this.bodyPayload$.next(this.createWrongBody())"
+    class="btn-wrong"
+  >
+    Falscher Body
+  </button>
+</div>
+
+<div
+  class="body"
+  *ngIf="(this.bodyStatus$ | async) != 'missing'; else missingBody"
+>
+  <p>Folgender Body wird verwendet:</p>
+
+  <div *ngIf="(this.bodyStatus$ | async) == 'parsed'; else erroredBody">
+    <pre>{{ this.bodyPayloadJsonString$ | async }}</pre>
+  </div>
+</div>
+
+<ng-template #missingBody>
+  <p>Es wurde noch kein Body generiert.</p>
+</ng-template>
+
+<ng-template #erroredBody>
+  <div class="error-container">
+    <p>Body wurde nicht validiert.</p>
+    <pre>{{ this.failedParseBodyError$ | async }}</pre>
+  </div>
+</ng-template>
+
+<div class="response" *ngIf="(this.apiResponseStatus$ | async) != 'missing'">
+  <div *ngIf="(this.apiResponseStatus$ | async) == 'success'">
+    <p>Folgende Antwort kommt vom Backend:</p>
+    <div *ngIf="this.apiResponse$ | async as data">
+      <pre>{{ this.apiResponseJsonString$ | async }}</pre>
+    </div>
+  </div>
+</div>

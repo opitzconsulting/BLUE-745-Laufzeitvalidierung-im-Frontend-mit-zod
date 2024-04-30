@@ -1,0 +1,69 @@
+<a style="color: white" [routerLink]="['/']">Zurück zur Index-Seite</a>
+
+<h1>Wetterstations-Demo</h1>
+
+<p>
+  In dieser Demo werden über die fetch-API Wetterstations-Daten geladen. Die
+  Antwort der Anfrage wird mit <code>zod</code> validiert. Dafür werden
+  automatisch generierte Definitionen verwendet.
+</p>
+<p>
+  Die Zod-Typen werden aus aus dem Quarkus-Backend exportierten JSON-Schemas
+  erstellt.
+</p>
+
+<p>
+  Der grüne Button lädt eine <i>korrekte</i> Anfrage. Es kommt eine Antwort
+  zurück, welche dem Schema entspricht. Der rote Button ruft einen alternativen,
+  aber ähnlichen Endpunkt auf. Die Antwort wird <i>nicht</i> durch
+  <code>zod</code>s Laufzeitvalidierung akzeptiert. Wir erkennen somit zur
+  Laufzeit einen Fehler und können Frühzeitig reagieren.
+</p>
+
+<div class="btn-group">
+  <button (click)="this.fetchCorrectWeatherData()" class="btn-correct">
+    Korrekte Antwort anfordern
+  </button>
+  <button (click)="this.fetchBadWeatherData()" class="btn-wrong">
+    Falsche Antwort anfordern
+  </button>
+</div>
+
+<div
+  class="result"
+  *ngIf="(this.lastResult$ | async) !== undefined; else loading"
+>
+  <div
+    *ngIf="this.lastDataOrUndefined$ | async as data; else errorNoDataOutput"
+  >
+    <table>
+      <tr>
+        <th>Station</th>
+        <th>Luftfeuchte in %</th>
+        <th>Windgeschw. in m/s</th>
+        <th>Temperatur °C</th>
+      </tr>
+      <tr *ngFor="let entry of data.weatherStations">
+        <td align="right">{{ entry.weatherStationName }}</td>
+        <td align="right">{{ entry.humidityFraction * 100 | number: ".3" }}</td>
+        <td align="right">{{ entry.windMetresPerSecond | number: ".3" }}</td>
+        <td align="right">
+          {{ entry.temperatureDegreesCelsius | number: ".1-1" }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<ng-template #loading> Still loading... </ng-template>
+<ng-template #errorNoDataOutput>
+  <div
+    class="error-container"
+    *ngIf="this.lastErrorOrUndefined$ | async as error"
+  >
+    <p>Failed with the following error:</p>
+    <pre
+      >{{ error }}
+    </pre>
+  </div>
+</ng-template>
