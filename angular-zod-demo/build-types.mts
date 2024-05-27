@@ -1,6 +1,6 @@
 // Invoke using npx vite-node ./build-types.mts from the project root.
 
-import { mkdirSync, readFileSync, rmSync, rmdirSync, writeFileSync } from "fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { basename, join } from "path";
 import { fileURLToPath } from "url";
 import {globSync} from "glob"

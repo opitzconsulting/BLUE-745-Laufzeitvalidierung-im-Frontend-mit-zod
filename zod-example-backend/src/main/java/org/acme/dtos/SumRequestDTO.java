@@ -1,5 +1,6 @@
 package org.acme.dtos;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@JsonClassDescription("Result of summing expenses and profits together")
 public class SumRequestDTO {
 
     @NotNull
