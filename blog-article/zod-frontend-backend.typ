@@ -97,7 +97,9 @@ wird somit beispielsweise in folgendes Schema umgewandelt:
 }
 ```
 
-Die genaue Konfiguration findet sich im Git Repo unter #link("")[TODO]. #link("https://www.baeldung.com/java-json-schema-create-automatically")[Eine Anleitung auf Baeldung] geht hier nochmal genauer in die einzelnen Konfigurationsmöglichkeiten. Die Anleitung wurde auch für unser Beispiel als Grundlage genommen. 
+Die genaue Konfiguration findet sich im Git Repo in der #link("https://github.com/opitzconsulting/BLUE-745-Laufzeitvalidierung-im-Frontend-mit-zod/blob/main/zod-example-backend/pom.xml#L113-L155")[pom.xml]. #link("https://www.baeldung.com/java-json-schema-create-automatically")[Eine Anleitung auf Baeldung] geht hier nochmal genauer in die einzelnen Konfigurationsmöglichkeiten. Die Anleitung wurde auch für unser Beispiel als Grundlage genommen. 
+
+*Kleine Anmerkung*: Der umgekehrte Weg ist auch möglich. Bei der "API First"-Herangehensweise werden die DTO-Stubs basierend auf einer OpenAPI Spec (oder einem JSON Schema) generiert.
 
 == Von JSON Schema zum Zod Schema
 
@@ -105,10 +107,10 @@ Für diesen Schritt wurde die `json-schema-to-zod`-Bibliothek verwendet.
 Die Bibliothek konsumiert das JSON Schema und gibt einen String zurück, welcher das Zod Schema abbildet und in eine Datei geschrieben werden kann.
 
 ```ts
-const zodifiedData = jsonFiles.map( filePath => ([
+const zodifiedData = await Promise.all(jsonFiles.map( async filePath => ([
   basename(filePath).replace(".json", ""), 
-  jsonSchemaToZod(JSON.parse(readFileSync(filePath, "utf8")))
-]));
+  jsonSchemaToZod(await resolveRefs(JSON.parse(readFileSync(filePath, "utf8"))))
+])));
 
 const moduleText = [
   "import {z} from 'zod';",
@@ -131,11 +133,11 @@ const result = await fetch("...")
   .catch(err => console.log(err));
 ```
 
-Die vollständige Implementation des Build-Skriptes #link("TODO")[kann dem Github Repository entnommen werden].
+Die vollständige Implementation des Build-Skriptes #link("https://github.com/opitzconsulting/BLUE-745-Laufzeitvalidierung-im-Frontend-mit-zod/blob/main/angular-zod-demo/build-types.mts")[kann dem Github Repository entnommen werden].
 
 == Verhalten bei Updates
 
 Wird das Interface des Backends angepasst, werden bei nächsten Bauen die JSON Schema-Dateien neu generiert.
 So lange das Build-Skript nicht getriggert wurde, wird das Frontend für die geänderten Endpunkte Fehler werfen, weil die Antwort nicht dem erwarteten Schema entspricht.
 
-Nachdem das Build-Skript durchlaufen, und dadurch die Zod Schemas angepasst wurden, hören die Fehler wegen dem unerwarteten Schema auf. Ggf. kommt es durch die Anpassung zu Compile-Zeit Fehlern durch `tsc`. Dadurch wird das neue aktualisierte Schema auch automatisch auf die generierten TypeScript-Typen abgebildet. Man bekommt also auch für die neuen Änderungen Autovervollständigungen durch die Entwicklungsumgebung.
+Nachdem das Build-Skript durchlaufen, und dadurch die Zod Schemas angepasst wurden, hören die Fehler wegen dem unerwarteten Schema auf. Ggf. kommt es durch die Anpassung zu Fehlern beim Kompilieren durch `tsc`. Dadurch wird das neue aktualisierte Schema auch automatisch auf die generierten TypeScript-Typen abgebildet. Man bekommt also auch für die neuen Änderungen Autovervollständigungen durch die Entwicklungsumgebung.

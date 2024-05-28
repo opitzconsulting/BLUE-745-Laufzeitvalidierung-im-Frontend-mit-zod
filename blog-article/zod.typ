@@ -70,13 +70,14 @@ Die oben gezeigte Funktion lässt sich beispielsweise mit Zod wie gefolgt ausdr�
 ```ts
 import {z} from "zod"
 
-const BodyZod = z.object({
+export const BodyZod = z.object({
   name: z.string(),
   id: z.number()
 });
 ```
-Das erstellte Schema kann dann gegen ein unbekanntes Objekt angewandt werden:
+Das erstellte Schema kann dann importiert und gegen ein unbekanntes Objekt angewandt werden:
 ```ts
+import { BodyZod } from "...";
 const responseUnchecked: unknown = await fetch("...").then(e => e.json());
 try {
   const response = BodyZod.parse(responseUnchecked);
@@ -116,5 +117,23 @@ const ExampleZod =
     );
 type Example = z.infer<typeof ExampleZod> // = number | "value1" | "value2"
 ```
-
+Ein weiteres Beispiel; ein Validator mit 2 Strings welche eine E-Mail und optional einen Regex-konformen String definieren:
+```ts
+const Example2Zod = z.object({
+  email: z.string().email(),
+  alphaNumeric: z
+    .string()
+    .regex(/[a-zA-Z0-9]*/)
+    .optional(),
+});
+```
 Eine Auflistung aller Typen und Beschränkungen können der #link("https://zod.dev/")[Dokuseite entnommen werden].
+
+== Fazit
+
+Zod bietet eine intuitive Möglichkeit, einen zur Kompilezeit erwarteten und den zur Laufzeit tatsächlich aufgetretenen Zustand zu synchronisieren.
+Dies ist für Anwendungen, welche Nutzereingaben oder externe Quellen (bspw. über fetch) verwenden wichtig, da das Typensystem von TypeScript nur eine Hilfestellung während der Entwicklung ist und es somit zur Laufzeit keine Typenüberprüfung gibt.
+
+Mit Zod können auch weitere Beschränkungen definiert werden, welche über TypeScripts Typensystem hinausgehen.  
+
+In einem kommenden Blogartikel wird zod am Anwendungsbeispiel Validierungsschnittstelle zwischen einem Front- und Backend genauer betrachtet.
